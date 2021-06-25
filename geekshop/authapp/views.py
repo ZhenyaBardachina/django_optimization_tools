@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
@@ -85,7 +86,7 @@ def send_verify_link(user):
 
 
 def verify(request, email, key):
-    user = ShopUser.objects.filter(email=email).first()
+    user = get_user_model().objects.filter(email=email).first()
     if user and user.activation_key == key and not user.is_activation_key_expired():
         user.is_active = True
         user.activation_key = ''
