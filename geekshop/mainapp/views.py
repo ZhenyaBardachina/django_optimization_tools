@@ -36,7 +36,7 @@ def category(request, pk=None):
         products = category.product_set.all()
         # products = Product.objects.filter(category__pk=pk)
 
-    product_paginator = Paginator(products, 2)
+    product_paginator = Paginator(products, 3)
     try:
         products = product_paginator.page(page_num)
     except PageNotAnInteger:

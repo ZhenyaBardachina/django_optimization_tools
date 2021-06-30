@@ -3,7 +3,7 @@ import random, hashlib
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
-from .models import ShopUser
+from .models import ShopUser, ShopUserProfile
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -33,6 +33,13 @@ class ShopUserRegisterForm(AgeValidationMixin, UserCreationForm):
             field.widget.attrs['class'] = 'form-control'
             field.help_text = ''
 
+# Не работает проверка уникальности email при регистрации, добавила проверку в models
+#     def check_unique_email(self):
+#         data = self.cleaned_data['email']
+#         if get_user_model().objects.filter(email=data).exists():
+#             raise forms.ValidationError(f'К сожалению, пользователь {data} уже существует. Проверьте правильность ввода!')
+#         return data
+
     def save(self):
         user = super().save()
 
@@ -57,3 +64,13 @@ class ShopUserEditForm(AgeValidationMixin, UserChangeForm):
             if field_name == 'password':
                 field.widget = forms.HiddenInput()
 
+
+class ShopUserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tagline', 'aboutMe', 'gender')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

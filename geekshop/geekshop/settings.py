@@ -1,8 +1,11 @@
 import os, json
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# load_dotenv(BASE_DIR / '.env') # for production
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -141,9 +144,17 @@ EMAIL_HOST_USER = 'django@geekshop.local' # from whom
 EMAIL_HOST_PASSWORD = 'geekshop'
 EMAIL_USE_SSL = False
 
+# for production
+# EMAIL_HOST = os.getenv('EMAIL_HOST') # get(key)
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'my_email@ya.ru' # from whom
+# EMAIL_HOST_PASSWORD = 'my_password'
+# EMAIL_USE_SSL = True
+
 ACTIVATION_KEY_TTL = 48
 
 
+# для вывода в терминал
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -171,7 +182,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
-# Загружаем секреты из файла
+# Загружаем секреты из файла, если они сохранены в файле. Можно подгрузить из .env
 # with open('geekshop/vk.json', 'r') as f:
 #     VK = json.load(f)
 
