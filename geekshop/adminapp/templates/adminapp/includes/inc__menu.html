@@ -1,0 +1,17 @@
+<div class="col-4 mx-auto">
+    <div class="row">
+        <ul class="menu">
+            <li>
+                <a href="{% url 'index' %}">на сайт</a>
+            </li>
+            <li>
+                <a href="{% url 'my_admin:index' %}">пользователи</a>
+            </li>
+            <li>
+                <a href="{% url 'my_admin:categories' %}">категории
+                    {% if category %}: {{ category.name }} {% endif %}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
