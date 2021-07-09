@@ -41,8 +41,8 @@ class Order(models.Model):
     def total_quantity(self):
         return sum(map(lambda x: x.quantity, self.items.all()))
 
-    @property
-    def total_cost(self):
+
+    def get_total_cost(self):
         return sum(map(lambda x: x.product_cost, self.items.all()))
 
     # переопределяем метод, удаляющий объект

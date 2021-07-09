@@ -8,21 +8,29 @@ from ordersapp.forms import OrderForm, OrderItemForm
 from ordersapp.models import Order, OrderItem
 
 
-# def index(request):
-#     return render(request, 'ordersapp/index.html')
+class PageTitleMixin:
+    page_title_key = 'page_title'
+    page_title = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[self.page_title_key] = self.page_title
+        return context
 
 
-class OrderList(ListView):
+class OrderList(PageTitleMixin, ListView):
     model = Order
+    page_title = 'список заказов'
 
     def get_queryset(self):
         return self.request.user.orders.all()
 
 
-class OrderCreate(CreateView):
+class OrderCreate(PageTitleMixin, CreateView):
     model = Order
     form_class = OrderForm
     success_url = reverse_lazy('orders:index')
+    page_title = 'создание заказа'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,16 +67,17 @@ class OrderCreate(CreateView):
                 self.request.user.basket.all().delete()
 
         # удаляем пустой заказ
-        if self.object.total_cost() == 0:
+        if self.object.get_total_cost() == 0:
             self.object.delete()
 
         return order
 
 
-class OrderUpdate(UpdateView):
+class OrderUpdate(PageTitleMixin, UpdateView,):
     model = Order
     form_class = OrderForm
     success_url = reverse_lazy('orders:index')
+    page_title = 'редактирование заказа'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -91,24 +100,21 @@ class OrderUpdate(UpdateView):
                 orderitems.save()
 
         # удаляем пустой заказ
-        if self.object.total_cost() == 0:
+        if self.object.get_total_cost() == 0:
             self.object.delete()
 
         return order
 
 
-class OrderDelete(DeleteView):
+class OrderDelete(PageTitleMixin, DeleteView):
     model = Order
     success_url = reverse_lazy('ordersapp:delete')
+    page_title = 'удаление заказа'
 
 
-class OrderRead(DetailView):
+class OrderRead(PageTitleMixin, DetailView):
     model = Order
-
-    def get_context_data(self, **kwargs):
-        context = super(OrderRead, self).get_context_data(**kwargs)
-        context['title'] = 'заказ/просмотр'
-        return context
+    page_title = 'просмотр заказа'
 
 
 def forming_complete(request, pk):
