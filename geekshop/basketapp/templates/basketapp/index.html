@@ -1,0 +1,31 @@
+{% extends 'basketapp/base.html' %}
+{% load static %}
+
+{% block container %}
+    <div class="basket_list">
+        {% if basket %}
+            {% for item in basket %}
+                <div class="basket_record">
+                    <img src="/media/{{ item.product.image }}" alt="{{ item.product.short_desc }}">
+                    <span class="category_name">{{ item.product.category.name }}</span>
+                    <span class="product_name">{{ item.product.name|capfirst }}</span>
+                    <span class="product_price">{{ item.product.price }}&nbspруб</span>
+                    <input type="number" name="{{ item.pk }}" min="0" max="{{ item.product.quantity }}" value="{{ item.quantity }}">
+                    <span class="product_cost">{{ item.product.cost }}&nbspруб</span>
+
+                    <a href="{% url 'basket:remove' basket_item_pk=item.pk %}" class="btn btn-round">
+                        удалить
+                    </a>
+                </div>
+            {% endfor %}
+
+            <div class="basket_summary">
+                {% include 'basketapp/includes/basket_summary.html' %}
+            </div>
+        {% else %}
+            <h4>Ваша корзина пуста</h4>
+        {% endif %}
+
+        <a href="{% url 'index' %}" class="btn btn-round">на главную</a>
+    </div>
+{% endblock %}
