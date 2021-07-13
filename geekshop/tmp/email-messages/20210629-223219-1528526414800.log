@@ -1,0 +1,11 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Account verify
+From: webmaster@localhost
+To: django15@gb.local
+Date: Tue, 29 Jun 2021 19:32:19 -0000
+Message-ID: <162499513962.3028.15654468423350110875@DESKTOP-6KNMDCK>
+
+Your link for account activation: http://localhost:8000/auth/verify/django15@gb.local/07b25fd46c2baa7891d8e1cae202b211b8c2efc8/
+-------------------------------------------------------------------------------
