@@ -1,0 +1,38 @@
+[
+  {
+    "category": "office",
+    "name": "oak table",
+    "image": "product_img/promo-img2.jpg",
+    "short_desc": "Solid oak dining table",
+    "description": "Solid oak is an environmentally friendly material, it is non-toxic and completely safe for health",
+    "price": "125500.00",
+    "quantity": 2
+  },
+  {
+    "category": "classic",
+    "name": "pine table",
+    "image": "",
+    "short_desc": "",
+    "description": "",
+    "price": "8990.00",
+    "quantity": 0
+  },
+  {
+    "category": "home",
+    "name": "work chair",
+    "image": "product_img/controll.jpg",
+    "short_desc": "Desk chair",
+    "description": "Provides softness and comfort, while the adjustable seat and backrest tilt and height provide optimal support. This chair will serve you for years to come.",
+    "price": "19990.70",
+    "quantity": 17
+  },
+  {
+      "category": "modern",
+      "name": "table lamp",
+      "image": "product_img/product-31.jpg",
+      "short_desc": "Creates soft, cozy mood lighting.",
+      "description": "To keep the price low, we have discarded the box for this product. Thanks to its expressive design, the lamp will fit into any interior and make even the darkest corner of your home cozy.",
+      "price": "7999.50",
+      "quantity": 25
+  }
+]

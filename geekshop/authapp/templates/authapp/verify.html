@@ -1,0 +1,14 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Поздравляем!</h1>
+        <p>Ваш аккаунт успешно активирован</p>
+    {% else %}
+        <h1>Что-то пошло не так...</h1>
+        <p>К сожалению, активация аккаунта не удалась. Обратитесь в службу поддержки!</p>
+    {% endif %}
+    <br>
+    <a href="{% url 'index' %}" class="btn btn-round form-control">На главную</a>
+{% endblock %}
