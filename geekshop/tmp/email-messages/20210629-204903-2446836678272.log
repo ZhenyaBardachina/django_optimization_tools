@@ -1,0 +1,11 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Account verify
+From: zhenya-bogdasheva@ya.ru
+To: django12@gb.local
+Date: Tue, 29 Jun 2021 17:49:03 -0000
+Message-ID: <162498894327.7116.14184698064509540836@DESKTOP-6KNMDCK>
+
+Your link for account activation: http://localhost:8000/auth/verify/django12@gb.local/f5d1fe71ab1cac70ab8518ab713cdb760d81b5c4/
+-------------------------------------------------------------------------------
