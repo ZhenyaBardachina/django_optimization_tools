@@ -102,9 +102,7 @@ window.onload = function () {
 
     $orderForm.on('change', 'select', function (event) {
         let target = event.target;
-        let orderItemNum = parseInt(
-            target.name.replace('items-', '').replace('-product', '')
-        );
+        let orderItemNum = parseInt(target.name.replace('items-', '').replace('-product', ''));
         let orderItemProductPk = target.options[target.selectedIndex].value;
 
         // console.log(orderItemNum, orderItemProductPk);
