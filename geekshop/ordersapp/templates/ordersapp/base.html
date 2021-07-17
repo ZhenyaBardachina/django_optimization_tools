@@ -11,17 +11,16 @@
         <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     {% endblock %}
     {% block js %}
-<!--            <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>-->
         <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
         <script src="{% static 'js/jquery.formset.js' %}"></script>
-        <script src="{% static 'js/orders_script.js' %}"></script>
+        <script src="{% static 'js/orders_scripts.js' %}"></script>
+<!--        <link href="{% static 'js/orders_script.js' %}">-->
     {% endblock %}
-
 <body>
   <div class="basket_container">
        {% block container %}
-
        {% endblock %}
   </div>
+
 </body>
 </html>

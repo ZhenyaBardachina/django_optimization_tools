@@ -15,7 +15,7 @@
                        <tr>
                            {% for field in form.visible_fields %}
                                <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
-                                   {{ field.label|capfirst }}
+                                   {{ field.label|lower }}
                                </th>
                            {% endfor %}
                        </tr>
@@ -29,13 +29,13 @@
                                        {{ hidden }}
                                    {% endfor %}
                                {% endif %}
-                               {{ field.errors.as_ul }}
+                                   {{ field.errors.as_ul }}
                                {% if field.name == 'price' %}
                                    <span class="items-{{ forloop.parentloop.counter0 }}-price">
                                        {{ field.value|default:"0,00" }}
                                    </span>руб
                                {% else %}
-                                   {{ field }}
+                                   {{ field|lower }}
                                {% endif %}
                            </td>
                        {% endfor %}

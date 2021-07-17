@@ -58,7 +58,9 @@ window.onload = function () {
     console.log("order DOM ready");
     // loadProductPrices();
 
-    totalForms = parseInt(document.querySelector('input[name="items-TOTAL_FORMS"]').value);
+//    totalForms = parseInt(document.querySelector('input[name="items-TOTAL_FORMS"]').value);
+    totalForms = parseInt($('input[name="items-TOTAL_FORMS"]').val())
+
 
     $orderTotalQuantityDOM = $('.order_total_quantity');
     orderTotalQuantity = parseInt($orderTotalQuantityDOM.text()) || 0;
@@ -108,7 +110,7 @@ window.onload = function () {
         // console.log(orderItemNum, orderItemProductPk);
         if (orderItemProductPk) {
             $.ajax({
-                url: "/product/" + orderItemProductPk + "/price/",
+                url: "order/product/" + orderItemProductPk + "/price/",
                 success: function (data) {
                     if (data.price) {
                         priceArr[orderItemNum] = parseFloat(data.price);
@@ -132,4 +134,4 @@ window.onload = function () {
             });
         }
     });
-}
+}  // end block window.onload
