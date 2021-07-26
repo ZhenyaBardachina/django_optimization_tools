@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from geekshop.settings import ACTIVATION_KEY_TTL
@@ -13,11 +14,15 @@ class ShopUser(AbstractUser):
     avatar = models.ImageField(upload_to='user_avatars', blank=True)
     age = models.PositiveIntegerField(verbose_name='возраст', default=18)
 
+    @cached_property
+    def basket_items(self):
+        return self.basket.select_related('product').all()
+
     def basket_price(self):
-        return sum(el.product_cost for el in self.basket.all())
+        return sum(el.product_cost for el in self.basket_items)
 
     def basket_quantity(self):
-        return sum(el.quantity for el in self.basket.all())
+        return sum(el.quantity for el in self.basket_items)
 
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_created = models.DateTimeField(auto_now_add=True, blank=True, null=True)

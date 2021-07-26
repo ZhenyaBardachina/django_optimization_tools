@@ -61,7 +61,7 @@ window.onload = function () {
 
 
     if (!order_total_quantity) {
-   orderSummaryRecalc();
+        orderSummaryRecalc();
 }
 
     function orderSummaryRecalc() {
@@ -82,6 +82,12 @@ window.onload = function () {
        orderitem_num = parseInt(target_name.replace('items-', '').replace('-quantity', ''));
        delta_quantity = -quantity_arr[orderitem_num];
        orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
+
+
+       quantity_arr[orderitem_num] = 0;
+       if (!isNaN(price_arr[orderitem_num]) && !isNaN(delta_quantity)) {
+           orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
+       }
     }
 
     $('.order_form select').change(function () {

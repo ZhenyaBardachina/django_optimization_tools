@@ -25,15 +25,15 @@ class OrderItemForm(BaseOrderForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['product'].queryset = Product.get_items()
+        self.fields['product'].queryset = Product.get_items().select_related()
 
     # Не работает
-    def clean_quantity(self):
-        quantity = self.cleaned_data.get('quantity')
-        product = self.cleaned_data.get('product')
-        if quantity > product.quantity:
-            raise forms.ValidationError("Недостаточно товара на складе!")
-        return quantity
+    # def clean_quantity(self):
+    #     quantity = self.cleaned_data.get('quantity')
+    #     product = self.cleaned_data.get('product')
+    #     if quantity > product.quantity:
+    #         raise forms.ValidationError('Недостаточно на складе!')
+    #     return quantity
 
 
     class Meta:

@@ -16,13 +16,10 @@
                  {% endif %}
                  <input class="form-control" type="submit" value="войти">
              </form>
+
         </div>
     </div>
-        <button class="btn btn-round form-control">
-            <a href="{% url 'social:begin' 'vk-oauth2' %}?next=/" class="">
-                вход через VK
-            </a>
-        </button>
+
         <div class="btn btn-round form-control">
         <a href="{% url 'auth:register' %}" class="">
             зарегистрироваться

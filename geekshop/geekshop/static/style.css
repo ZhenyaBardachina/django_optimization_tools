@@ -1401,8 +1401,8 @@ td:first-child {
 	padding: 0px 97px;
 }
 .location-1 {
-	height: 368px;
-	width: 368px;
+	height: 358px;
+	width: 358px;
 	border: 1px solid #9c9c9c;
 	margin: 71px 28px 122px 0px;
 	float: left;
@@ -1717,6 +1717,7 @@ td:first-child {
 }
 .related-products .block a img {
 	float: left;
+	width: 100%;
 }
 .related-products .block {
 	float: left;

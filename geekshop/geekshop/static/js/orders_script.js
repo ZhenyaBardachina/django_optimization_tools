@@ -95,12 +95,6 @@ window.onload = function () {
         orderSummaryUpdate(priceArr[orderItemNum], deltaQuantity);
     });
 
-    $('.formset_row').formset({
-        addText: 'добавить продукт',
-        deleteText: 'удалить',
-        prefix: 'items',
-        removed: deleteOrderItem
-    });
 
     $orderForm.on('change', 'select', function (event) {
         let target = event.target;
@@ -134,4 +128,12 @@ window.onload = function () {
             });
         }
     });
+
+    $('.formset_row').formset({
+        addText: 'добавить продукт',
+        deleteText: 'удалить',
+        prefix: 'items',
+        removed: deleteOrderItem
+    });
+
 }  // end block window.onload

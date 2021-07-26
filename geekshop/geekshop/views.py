@@ -12,6 +12,13 @@ def main(request):
     return render(request, 'index.html', context)
 
 
+# def index(request):
+#     context = {
+#         'page_title': 'главная',
+#     }
+#     return render(request, 'index.html', context)
+
+
 def contact(request):
     locations = [
         {'city': 'Екатеринбург',

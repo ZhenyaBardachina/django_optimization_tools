@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
@@ -5,8 +6,10 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, DeleteView, DetailView, UpdateView
 
+from basketapp.models import Basket
 from mainapp.models import Product
 from ordersapp.forms import OrderForm, OrderItemForm
 from ordersapp.models import Order, OrderItem
@@ -22,7 +25,13 @@ class PageTitleMixin:
         return context
 
 
-class OrderList(PageTitleMixin, ListView):
+class LoggedUserOnlyMixin:
+    @method_decorator(user_passes_test(lambda user: user.is_authenticated))
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+class OrderList(PageTitleMixin, LoggedUserOnlyMixin, ListView):
     model = Order
     page_title = 'список заказов'
 
@@ -30,7 +39,7 @@ class OrderList(PageTitleMixin, ListView):
         return self.request.user.orders.all()
 
 
-class OrderCreate(PageTitleMixin, CreateView):
+class OrderCreate(PageTitleMixin, LoggedUserOnlyMixin, CreateView):
     model = Order
     form_class = OrderForm
     success_url = reverse_lazy('orders:index')
@@ -77,7 +86,7 @@ class OrderCreate(PageTitleMixin, CreateView):
         return order
 
 
-class OrderUpdate(PageTitleMixin, UpdateView, ):
+class OrderUpdate(PageTitleMixin, LoggedUserOnlyMixin, UpdateView, ):
     model = Order
     form_class = OrderForm
     success_url = reverse_lazy('orders:index')
@@ -89,7 +98,8 @@ class OrderUpdate(PageTitleMixin, UpdateView, ):
         if self.request.POST:
             formset = OrderFormSet(self.request.POST, self.request.FILES, instance=self.object)
         else:
-            formset = OrderFormSet(instance=self.object)
+            queryset = self.object.items.select_related('product')
+            formset = OrderFormSet(instance=self.object, queryset=queryset)
             for form in formset.forms:
                 instance = form.instance
                 if instance.pk:
@@ -114,7 +124,7 @@ class OrderUpdate(PageTitleMixin, UpdateView, ):
         return order
 
 
-class OrderDelete(PageTitleMixin, DeleteView):
+class OrderDelete(PageTitleMixin, LoggedUserOnlyMixin, DeleteView):
     model = Order
     success_url = reverse_lazy('ordersapp:index')
     page_title = 'удаление заказа'
@@ -149,6 +159,7 @@ def product_quantity_update_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
     instance.product.save()
 
+
 @receiver(pre_delete, sender=Order)
 def product_quantity_update_delete(sender, instance, **kwargs):
     print('order delete')
@@ -156,10 +167,8 @@ def product_quantity_update_delete(sender, instance, **kwargs):
 
 def get_product_price(request, pk):
     if request.is_ajax():
-        product = Product.objects.filter(pk=pk).first()
-        return JsonResponse({'price': product.price if product else 0})
-        # return JsonResponse({'price': product and product.price or 0})
-
-
-
-
+        product = Product.objects.filter(pk=int(pk)).first()
+        if product:
+            return JsonResponse({'price': product.price})
+        else:
+            return JsonResponse({'price': 0})
