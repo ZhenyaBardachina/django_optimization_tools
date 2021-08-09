@@ -14,6 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-esnu-^7p+i8w2cr_h()3$6fzzsl(s1nfj6-o^^_n1ei2pb+v)&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -33,36 +34,38 @@ INSTALLED_APPS = [
     'adminapp',
     'social_django',
     'ordersapp',
-    'debug_toolbar',
-    'template_profiler_panel',
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
+    # 'django.middleware.cache.UpdateCacheMiddleware',   # site caching
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',   # site caching
 ]
 
-# if DEBUG:
-#     INSTALLED_APPS.extend([
-#         'debug-toolbar',
-#         'template_profiler_panel',
-#     ])
-#     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-
 if DEBUG:
+    INSTALLED_APPS.extend(
+        ['debug_toolbar',
+         'template_profiler_panel',
+         'django_extensions', ]
+    )
+    MIDDLEWARE.append(
+        'debug_toolbar.middleware.DebugToolbarMiddleware'
+    )
+
+
     def show_toolbar(request):
         return True
 
+
     DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+        'SHOW_TOOLBAR_CALLBACK': lambda x: True,
     }
 
     DEBUG_TOOLBAR_PANELS = [
@@ -81,6 +84,9 @@ if DEBUG:
         'debug_toolbar.panels.profiling.ProfilingPanel',
         'template_profiler_panel.panels.template.TemplateProfilerPanel',
     ]
+
+
+# MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')
 
 ROOT_URLCONF = 'geekshop.urls'
 
@@ -157,11 +163,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'geekshop', 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'geekshop', 'static'),
+)
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'geekshop/static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'geekshop/static')
 
 STATICFILES_FINDERS = {
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -230,3 +236,20 @@ SOCIAL_AUTH_PIPELINE = (
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '7888638'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = '0vXddLChwneLpo8RVsxj'
+
+# LOW_CACHE = False
+
+if os.name == 'posix':
+    CACHE_MIDDLEWARE_ALIAS = 'default'
+    CACHE_MIDDLEWARE_SECONDS = 120
+    CACHE_MIDDLEWARE_KEY_PREFIX = 'geekshop'
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+        }
+    }
+
+LOW_CACHE = True
+

@@ -1,5 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import user_passes_test
+from django.db import connection
+from django.db.models import F
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -55,6 +59,24 @@ def index(request):
 #     return render(request, 'adminapp/shopuser_form.html', context)
 
 
+def db_profile_by_type(sender, q_type, queries):
+    print(f'db_profile {q_type} for {sender}:')
+    for query in filter(lambda x: q_type in x,
+                        map(lambda x: x['sql'], queries)):
+        print(query)
+
+
+@receiver(pre_save, sender=ProductCategory)
+def product_is_active_update_productcategory_save(sender, instance, **kwargs):
+    if instance.pk:
+        if instance.is_active:
+            instance.product_set.update(is_active=True)
+        else:
+            instance.product_set.update(is_active=False)
+
+        db_profile_by_type(sender, 'UPDATE', connection.queries)
+
+
 class ShopUserAdminUpdate(SuperUserOnlyMixin, PageTitleMixin, UpdateView):
     model = get_user_model()
     form_class = AdminShopUserUpdateForm
@@ -106,6 +128,20 @@ class ProductCategoryUpdate(SuperUserOnlyMixin, PageTitleMixin, UpdateView):
     form_class = ProductCategoryCreateForm
     success_url = reverse_lazy('my_admin:categories')
     page_title = 'категории/редактирование'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'категории/редактирование'
+        return context
+
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                self.object.product_set.update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+
+        return super().form_valid(form)
 
 
 class ProductCategoryDelete(SuperUserOnlyMixin, PageTitleMixin, DeleteView):

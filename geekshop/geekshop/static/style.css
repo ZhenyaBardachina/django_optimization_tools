@@ -368,7 +368,7 @@ html, body {
     display: block;
     float: left;
     margin-top: 15px;
-    margin-left: 25px;
+    margin-left: 50px;
     width: 175px;
 }
 
@@ -394,7 +394,7 @@ html, body {
     float: left;
     margin-top: 40px;
     margin-left: 25px;
-    width: 45px;
+    width: 60px;
 }
 
 .user_record .user_role {
@@ -408,7 +408,7 @@ html, body {
 .user_record .user_lastlogin {
     display: block;
     float: left;
-    margin-top: 40px;
+    margin-top: 50px;
     margin-left: 25px;
     width: 175px;
 }
@@ -635,15 +635,13 @@ html, body {
 
 .login {
     background: #fff;
-    border: 1px solid #eaeaea;
-    border-radius: 25px;
     overflow: hidden;
     width: 28em;
     min-width: 500px;
     margin: 100px auto;
-       
     position: relative;
     display: block;
+    text-align: center;
 }
 
 .login .head {
@@ -683,7 +681,7 @@ html, body {
 }
 
 .user_avatar img {
-    width: 300px;
+    width: 150px;
     border-radius: 25px;
 }
 
@@ -1401,8 +1399,8 @@ td:first-child {
 	padding: 0px 97px;
 }
 .location-1 {
-	height: 358px;
-	width: 358px;
+	height: 368px;
+	width: 368px;
 	border: 1px solid #9c9c9c;
 	margin: 71px 28px 122px 0px;
 	float: left;
@@ -1670,7 +1668,7 @@ td:first-child {
 	color:  #ffffff;
 	font-size: 22px;
 	font-weight: 700;
-	line-height: 24px;
+	/*line-height: 24px;*/
 	box-shadow: 0px 2px 4.85px 0.15px rgba(33, 33, 33, 0.35);
 	line-height: 70px;
 	letter-spacing: 6px;
@@ -1717,7 +1715,6 @@ td:first-child {
 }
 .related-products .block a img {
 	float: left;
-	width: 100%;
 }
 .related-products .block {
 	float: left;
@@ -1761,4 +1758,8 @@ td:first-child {
 }
 .related-products a:hover .text{
 	display: block;
+}
+
+.product_list {
+    margin-left: 5%;
 }

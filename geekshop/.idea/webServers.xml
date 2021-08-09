@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="40142c50-3123-4334-b2dd-f54ae5e64610" name="194.58.122.97">
+        <fileTransfer rootFolder="/home/django/geekshop/" accessType="SFTP" host="194.58.122.97" port="22" sshConfigId="596d2e72-8a8c-4a05-ae12-9c81c6c9d481" sshConfig="root@194.58.122.97:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

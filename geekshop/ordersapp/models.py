@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.functional import cached_property
+
 from mainapp.models import Product
 
 
@@ -28,7 +30,7 @@ class Order(models.Model):
                               default=FORMING)
     is_active = models.BooleanField(verbose_name='активен', default=True)
 
-    @property
+    @cached_property
     def is_forming(self):
         return self.status == self.FORMING
 
@@ -37,13 +39,23 @@ class Order(models.Model):
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
 
+    # @cached_property
     @property
     def total_quantity(self):
         return sum(map(lambda x: x.quantity, self.items.all()))
 
-
-    def get_total_cost(self):
+    # @cached_property
+    @property
+    def total_cost(self):
         return sum(map(lambda x: x.product_cost, self.items.all()))
+
+    @property
+    def summary(self):
+        items = self.items.select_related()
+        return {
+            'total_quantity': sum(list(map(lambda x: x.quantity, items))),
+            'total_cost': sum(list(map(lambda x: x.product_cost, items)))
+        }
 
     # переопределяем метод, удаляющий объект
     def delete(self, using=None, keep_parent=False):
@@ -71,18 +83,17 @@ class OrderItem(models.Model):
                                 verbose_name='продукт',
                                 on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(verbose_name='количество',
-                                           default=0)
+                                                default=0)
 
     # objectss = OrderItemManager.as_manager()
 
-    @property
+    @cached_property
     def product_cost(self):
         return self.product.price * self.quantity
 
-
     @classmethod
     def get_item(cls, pk):
-        return cls.objects.filter(pk=pk).first()
+        return cls.objects.select_related('product').filter(pk=pk).first()
 
     # def delete(self, using=None, keep_parents=None):
     #     print('OrderItem instance delete')

@@ -1,13 +1,40 @@
 import random
+
+from django.conf import settings
+from django.core.cache import cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.cache import cache_page, never_cache
+
 from mainapp.models import Product, ProductCategory
+
+
+def get_products():
+    if settings.LOW_CACHE:
+        key = 'all_products'
+        products = cache.get(key)
+        if products is None:
+            products = Product.get_items()
+            cache.set(key, products)
+        return products
+    return Product.get_items()
+
+
+def get_products_by_category(pk):
+    if settings.LOW_CACHE:
+        key = f'category_{pk}_products'
+        products = cache.get(key)
+        if products is None:
+            products = Product.get_items().filter(category_id=pk)
+            cache.set(key, products)
+        return products
+    return Product.get_items().filter(category_id=pk)
 
 
 # return some random product and render
 def get_hot_product():
-    product_ids = Product.get_items().values_list('id', flat=True)
+    product_ids = get_products().values_list('id', flat=True)
     random_id = random.choice(product_ids)
     return Product.objects.get(pk=random_id)
     # return random.choice(Product.objects.all())
@@ -16,6 +43,9 @@ def get_hot_product():
 def same_product(hot_product):
     return Product.get_items().filter(category=hot_product.category).exclude(pk=hot_product.pk)[:3]
 
+
+# @never_cache
+# @cache_page(3600)
 def products(request):
     hot_product = get_hot_product()
     context = {
@@ -30,11 +60,10 @@ def category(request, pk=None):
     page_num = request.GET.get('page', 1)
     if pk == 0:
         category = {'pk': 0, 'name': 'все', }
-        products = Product.get_items()
+        products = get_products()
     else:
         category = get_object_or_404(ProductCategory, pk=pk)
-        products = category.product_set.filter(is_active=True)
-        # products = Product.objects.filter(category__pk=pk)
+        products = get_products_by_category(pk)
 
     product_paginator = Paginator(products, 3)
     try:
@@ -60,5 +89,13 @@ def product_page(request, pk):
         'product': product,
     }
     return render(request, 'product_page.html', context)
+
+
+def get_product_price(request, pk):
+    if request.is_ajax():
+        product = Product.objects.filter(pk=pk).first()
+        return JsonResponse(
+            {'price': product and product.price or 0}
+        )
 
 
