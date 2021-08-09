@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+	<div class="hero-white">
+		{% include 'includes/inc_menu.html' %}
+			<a href="#" class="basket"></a>
+	</div>
+
+	<div class="details">
+		{% include 'includes/inc_catalog.html' %}
+
+		<div class="related">
+			<div class="title clearfix">
+				<h2>Продукты категории {{ category.name|upper }}</h2>
+				<div class="paginator">
+					{% if products.has_previous %}
+						<a href="{% url 'category' category.pk %}?page={{ products.previous_page_number }}"> << </a>
+					{% endif %}
+					<span class="current">страница {{ products.number }} из {{ products.paginator.num_pages }}</span>
+					{% if products.has_next %}
+						<a href="{% url 'category' category.pk %}?page={{ products.next_page_number }}"> >> </a>
+					{% endif %}
+				</div>
+			</div>
+			<div class="related-products clearfix">
+				{% for product in products %}
+					<div class="block">
+					<a href="{% url 'product_page' product.pk %}">
+						<img src="/media/{{ product.image }}" alt="">
+						<div class="text">
+							<img src="{% static 'img/icon-hover.png' %}" alt="img">
+							<h4>{{ product.name|capfirst }}</h4>
+							<p>{{ product.short_desc|capfirst }}</p>
+						</div>
+					</a>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
