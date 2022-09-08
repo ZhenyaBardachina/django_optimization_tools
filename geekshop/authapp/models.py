@@ -9,7 +9,7 @@ from geekshop.settings import ACTIVATION_KEY_TTL
 
 
 class ShopUser(AbstractUser):
-    email = models.EmailField(verbose_name='email', unique=True, blank=True)
+    # email = models.EmailField(verbose_name='email', unique=True, blank=True)
     avatar = models.ImageField(upload_to='user_avatars', blank=True)
     age = models.PositiveIntegerField(verbose_name='возраст', default=18)
 

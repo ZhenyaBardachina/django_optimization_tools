@@ -3,10 +3,9 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
-
 from basketapp.models import Basket
 
-# Create your views here.
+
 from geekshop.settings import LOGIN_URL
 
 

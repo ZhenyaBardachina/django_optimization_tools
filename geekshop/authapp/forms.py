@@ -34,11 +34,11 @@ class ShopUserRegisterForm(AgeValidationMixin, UserCreationForm):
             field.help_text = ''
 
 # Не работает проверка уникальности email при регистрации, добавила проверку в models
-#     def check_unique_email(self):
-#         data = self.cleaned_data['email']
-#         if get_user_model().objects.filter(email=data).exists():
-#             raise forms.ValidationError(f'К сожалению, пользователь {data} уже существует. Проверьте правильность ввода!')
-#         return data
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if get_user_model().objects.filter(email=data).exists():
+            raise forms.ValidationError(f'К сожалению, пользователь {data} уже существует. Проверьте правильность ввода!')
+        return data
 
     def save(self):
         user = super().save()

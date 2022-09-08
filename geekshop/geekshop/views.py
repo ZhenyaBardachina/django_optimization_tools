@@ -1,6 +1,4 @@
 from django.shortcuts import render
-
-
 from basketapp.models import Basket
 
 

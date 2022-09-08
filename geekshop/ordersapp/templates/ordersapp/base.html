@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
-	<meta charset="utf-8">
+  <meta charset="utf-8">
 	<title>
 		{{ page_title|default:'магазин'|capfirst }}
 	</title>
@@ -12,20 +12,16 @@
     {% endblock %}
         {% block js %}
             <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-            <script src="{% static 'js/basket_script.js' %}"></script>
+            <script src="{% static 'js/jquery.formset.js' %}"></script>
+            <script src="{% static 'js/orders_script.js' %}"></script>
         {% endblock %}
 
+</head>
 <body>
+  <div class="basket_container">
+       {% block container %}
 
-    <div class="basket_container">
-      <div class="h2 text-center head">
-        Ваша корзина,
-        {{ user.first_name|default:"пользователь"|capfirst }}
-      </div>
-
-        {% block container %}
-        {% endblock %}
-
-    </div>
+       {% endblock %}
+  </div>
 </body>
 </html>
