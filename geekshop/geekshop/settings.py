@@ -1,8 +1,11 @@
-import os
+import os, json
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# load_dotenv(BASE_DIR / '.env') # for production
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -28,6 +31,7 @@ INSTALLED_APPS = [
     'authapp',
     'basketapp',
     'adminapp',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -38,6 +42,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'geekshop.urls'
@@ -53,6 +58,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.categories',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -131,16 +139,54 @@ LOGIN_URL = '/auth/login/'
 DOMAIN_NAME = 'http://localhost:8000'
 
 EMAIL_HOST = 'localhost'
-EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'django@geekshop.local'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'django@geekshop.local' # from whom
 EMAIL_HOST_PASSWORD = 'geekshop'
 EMAIL_USE_SSL = False
 
+# for production
+# EMAIL_HOST = os.getenv('EMAIL_HOST') # get(key)
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'my_email@ya.ru' # from whom
+# EMAIL_HOST_PASSWORD = 'my_password'
+# EMAIL_USE_SSL = True
 
+ACTIVATION_KEY_TTL = 48
+
+
+# для вывода в терминал
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = 'tmp/email-messages/'
 
+LOGIN_ERROR_URL = '/'
+
+SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+)
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.create_user',
+    'authapp.pipeline.save_user_profile',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+# Загружаем секреты из файла, если они сохранены в файле. Можно подгрузить из .env
+# with open('geekshop/vk.json', 'r') as f:
+#     VK = json.load(f)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7888638'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = '0vXddLChwneLpo8RVsxj'
 
 

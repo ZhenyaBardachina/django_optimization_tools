@@ -1,6 +1,5 @@
 import json
 import os
-
 from django.core.management.base import BaseCommand
 from mainapp.models import Product, ProductCategory
 from authapp.models import ShopUser
@@ -33,4 +32,4 @@ class Command(BaseCommand):
         #     Product.objects.create(**item)
 
         if not ShopUser.objects.filter(username='django').exists():
-            ShopUser.objects.create_superuser('django', 'django@gb.local', 'geekbrains', age='34')
+            ShopUser.objects.create_superuser('django', 'django@gb.local', 'geekbrains', age='35')
