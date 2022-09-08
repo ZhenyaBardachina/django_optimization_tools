@@ -1,0 +1,11 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Account verify
+From: django@geekshop.local
+To: django5@gb.local
+Date: Wed, 23 Jun 2021 14:46:36 -0000
+Message-ID: <162445959633.8172.7029371041300854092@DESKTOP-6KNMDCK>
+
+Your link for account activation: http://localhost:8000/auth/verify/django5@gb.local/66fa68e6e1fe78783b9d5c6e753c1e692e0c61de
+-------------------------------------------------------------------------------
