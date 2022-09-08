@@ -47,15 +47,20 @@ class Order(models.Model):
 
     # переопределяем метод, удаляющий объект
     def delete(self, using=None, keep_parent=False):
-        # for item in self.orderitems.select_related():
-        #     item.product.quantity += item.quantity
-        #     item.product.save()
         for item in self.items.all():
             item.product.quantity += item.quantity
             item.product.save()
-
+        # print('Order delete')
+        # self.items.delete()
         self.is_active = False
         self.save()
+        # super().delete()
+
+
+class OrderItemManager(models.QuerySet):
+    def delete(self):
+        print('OrderItemManager QS delete')
+        super().delete()
 
 
 class OrderItem(models.Model):
@@ -68,6 +73,17 @@ class OrderItem(models.Model):
     quantity = models.PositiveSmallIntegerField(verbose_name='количество',
                                            default=0)
 
+    # objectss = OrderItemManager.as_manager()
+
     @property
     def product_cost(self):
         return self.product.price * self.quantity
+
+
+    @classmethod
+    def get_item(cls, pk):
+        return cls.objects.filter(pk=pk).first()
+
+    # def delete(self, using=None, keep_parents=None):
+    #     print('OrderItem instance delete')
+    #     super().delete(using, keep_parents)

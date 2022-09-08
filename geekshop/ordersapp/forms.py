@@ -19,6 +19,8 @@ class OrderForm(BaseOrderForm):
 
 
 class OrderItemForm(BaseOrderForm):
+    price = forms.FloatField(label='цена за 1 ед', required=False)
+
     class Meta:
         model = OrderItem
         fields = '__all__'
